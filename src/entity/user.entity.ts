@@ -7,8 +7,8 @@ import {SetPasswordDto} from "./dto/set-password.dto";
 @Entity()
 @Unique(["email"])
 export class UserEntity {
-    @PrimaryGeneratedColumn("increment")
-    id: number;
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
 
     @IsNotEmpty()
     @IsString()
@@ -47,7 +47,7 @@ export class UserEntity {
         this.password = await bcrypt.hash(password, 10);
     }
 
-    async isPasswordValid(password: string) {
+    async isPasswordValid(password: string): Promise<boolean> {
         return await bcrypt.compare(password, this.password);
     }
 

@@ -114,7 +114,6 @@ describe('User', function () {
             await user.setPassword("passwordpassword", "passwordpassword");
             const match = await user.isPasswordValid("passwordpassword");
             expect(match).toBeTruthy();
-
         });
     })
 
