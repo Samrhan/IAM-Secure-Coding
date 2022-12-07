@@ -1,4 +1,4 @@
-import {BeforeInsert, Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
+import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
 import {IsNotEmpty, IsString, validateOrReject, ValidationError} from "class-validator";
 import {UniqueInColumn} from "../decorators/unique-in-column.decorator";
 import * as bcrypt from "bcrypt";
@@ -22,7 +22,7 @@ export class UserEntity {
 
     @IsNotEmpty()
     @IsString()
-    @UniqueInColumn()
+    @UniqueInColumn({caseSensitive: false})
     @Column()
     email: string;
 
