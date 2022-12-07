@@ -1,6 +1,4 @@
 // init dotenv
-import {AppDataSource} from "./lib/database";
+import dotenv from 'dotenv';
+dotenv.config();
 
-AppDataSource.initialize().then(() => {
-    console.log("Database initialized");
-});
