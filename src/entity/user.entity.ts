@@ -1,8 +1,9 @@
-import {BeforeInsert, Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {BeforeInsert, Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
 import {IsNotEmpty, IsString, validateOrReject} from "class-validator";
 import {ValidationError} from "../errors/validation.error";
 
 @Entity()
+@Unique(["email"])
 export class UserEntity {
     @PrimaryGeneratedColumn("increment")
     id: number;
@@ -24,7 +25,7 @@ export class UserEntity {
 
     @IsNotEmpty()
     @IsString()
-    @Column()
+    @Column({select: false})
     passwordHash: string;
 
     constructor(firstname: string, lastname: string, email: string, passwordHash: string) {
