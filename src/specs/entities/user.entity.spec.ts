@@ -26,7 +26,9 @@ describe('User', function () {
             expect(users[0].firstname).toBe("John");
             expect(users[0].lastname).toBe("Doe");
             expect(users[0].email).toBe("john.doe@live.com");
-            expect(users[0].passwordHash).toBe("password");
+
+            // We don't want to expose the password hash
+            expect(users[0].passwordHash).toBeUndefined();
         });
 
         it('should raise error if email is missing', async function () {
@@ -44,6 +46,25 @@ describe('User', function () {
             expect(catchedError[0].property).toEqual("email");
             expect(catchedError[0].target).toStrictEqual(user);
         })
+
+        it("should raise error if email is not unique", async function () {
+            const user1 = new UserEntity("John", "Doe", "john.doe@live.com", "password");
+            const user2 = new UserEntity("John", "Doe", "john.doe@live.com", "password");
+            await dataSource.getRepository(UserEntity.name).save(user1);
+            let catchedError: ValidationError[];
+            try {
+                await dataSource.getRepository(UserEntity.name).save(user2);
+            }
+            catch (e) {
+                if (Array.isArray(e) && e[0] instanceof ValidationError) {
+                    catchedError = e;
+                }
+            }
+            expect(catchedError).toBeDefined();
+            expect(catchedError.length).toBe(1);
+            expect(catchedError[0].property).toEqual("email");
+            expect(catchedError[0].target).toStrictEqual(user2);
+        });
     })
 
     afterAll(async () => {

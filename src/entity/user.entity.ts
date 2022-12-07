@@ -1,6 +1,7 @@
 import {BeforeInsert, Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
 import {IsNotEmpty, IsString, validateOrReject} from "class-validator";
 import {ValidationError} from "../errors/validation.error";
+import {UniqueInColumn} from "../decorators/unique-in-column.decorator";
 
 @Entity()
 @Unique(["email"])
@@ -20,6 +21,7 @@ export class UserEntity {
 
     @IsNotEmpty()
     @IsString()
+    @UniqueInColumn()
     @Column()
     email: string;
 
