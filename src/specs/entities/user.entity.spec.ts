@@ -66,7 +66,7 @@ describe('User', function () {
 
         it("should hash password if password match confirmation", async () => {
             const user = new UserEntity("John", "Doe", "john.doe@live.com");
-            await user.setPassword("password", "password");
+            await user.setPassword("passwordpassword", "passwordpassword");
             const hashedPassword = await bcrypt.hash("password", 10);
             const match = bcrypt.compare("password", hashedPassword);
             expect(match).toBeTruthy();
@@ -76,7 +76,7 @@ describe('User', function () {
             const user = new UserEntity("John", "Doe", "john.doe@live.com");
             let caughtError: ValidationError[];
             try {
-                await user.setPassword("password", "notpassword");
+                await user.setPassword("passwordpassword", "notpassword");
             } catch (e) {
                 if (Array.isArray(e) && e[0] instanceof ValidationError) {
                     caughtError = e;
@@ -86,15 +86,37 @@ describe('User', function () {
             expect(caughtError.length).toBe(1);
             expect(caughtError[0].property).toEqual("password");
         })
-    })
 
-    describe('password strength', () => {
         it("should raise error if password is too weak", async () => {
-            const user = new UserEntity("John", "Doe", "john.doe@live.com", "password");
-            const entropy = user.computeEntropy("1234567890");
-            expect(Math.floor(entropy)).toEqual(64);
+            const user = new UserEntity("John", "Doe", "john.doe@live.com");
+            let caughtError: ValidationError[];
+            try {
+                await user.setPassword("password", "password");
+            } catch (e) {
+                if (Array.isArray(e) && e[0] instanceof ValidationError) {
+                    caughtError = e;
+                }
+            }
+            expect(caughtError).toBeDefined();
+            expect(caughtError.length).toBe(1);
+            expect(caughtError[0].property).toEqual("password");
         })
-    });
+
+        it("should return false if password doesn't match the actual password", async () => {
+            const user = new UserEntity("John", "Doe", "john.doe@live.com");
+            await user.setPassword("passwordpassword", "passwordpassword");
+            const match = await user.isPasswordValid("notpassword");
+            expect(match).toBeFalsy();
+        })
+
+        it("should return true if password match the actual password", async () => {
+            const user = new UserEntity("John", "Doe", "john.doe@live.com");
+            await user.setPassword("passwordpassword", "passwordpassword");
+            const match = await user.isPasswordValid("passwordpassword");
+            expect(match).toBeTruthy();
+
+        });
+    })
 
     afterAll(async () => {
         await dataSource.destroy();
