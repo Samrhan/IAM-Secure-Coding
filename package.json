@@ -4,7 +4,7 @@
   "description": "Basic template of a node + typescript project",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp .env ./dist/.env",
     "lint": "eslint --fix src",
     "test": "jest",
     "start": "node dist/index.js"

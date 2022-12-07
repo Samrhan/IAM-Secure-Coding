@@ -1,10 +1,10 @@
 import {DataSource} from "typeorm"
 import {UserEntity} from "../entity/user.entity";
-import * as dotenv from "dotenv";
+import dotenv from 'dotenv';
 import {InsertSubscriber} from "../subcribers/insert.subcriber";
 
 
-dotenv.config();
+dotenv.config({path: '.env'});
 
 
 export const AppDataSource = new DataSource({
