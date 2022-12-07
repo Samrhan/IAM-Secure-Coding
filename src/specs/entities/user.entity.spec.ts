@@ -8,7 +8,7 @@ describe('User', function () {
     let dataSource: DataSource;
 
     beforeAll(async () => {
-        dataSource = await AppDataSource.initialize().catch((error) => {
+        dataSource = await AppDataSource.initialize().catch((error: Error) => {
             throw new Error(`Error initializing database: ${error.message}`);
         });
         await dataSource.getRepository(UserEntity.name).clear()
@@ -39,7 +39,7 @@ describe('User', function () {
                 await dataSource.getRepository(UserEntity.name).save(user);
             } catch (e) {
                 if (Array.isArray(e) && e[0] instanceof ValidationError) {
-                    catchedError = e;
+                    catchedError = e as ValidationError[];
                 }
             }
             expect(catchedError).toBeDefined();
@@ -56,7 +56,7 @@ describe('User', function () {
                 await dataSource.getRepository(UserEntity.name).save(user2);
             } catch (e) {
                 if (Array.isArray(e) && e[0] instanceof ValidationError) {
-                    catchedError = e;
+                    catchedError = e as ValidationError[];
                 }
             }
             expect(catchedError).toBeDefined();
@@ -79,7 +79,7 @@ describe('User', function () {
                 await user.setPassword("passwordpassword", "notpassword");
             } catch (e) {
                 if (Array.isArray(e) && e[0] instanceof ValidationError) {
-                    caughtError = e;
+                    caughtError = e as ValidationError[];
                 }
             }
             expect(caughtError).toBeDefined();
@@ -94,7 +94,7 @@ describe('User', function () {
                 await user.setPassword("password", "password");
             } catch (e) {
                 if (Array.isArray(e) && e[0] instanceof ValidationError) {
-                    caughtError = e;
+                    caughtError = e as ValidationError[];
                 }
             }
             expect(caughtError).toBeDefined();
