@@ -1,5 +1,6 @@
 import {IsNotEmpty, IsString} from "class-validator";
 import {Match} from "../../decorators/match.decorator";
+import {PasswordStrength} from "../../decorators/password-strenght.validator";
 
 export class SetPasswordDto {
     constructor(password: string, confirmation: string) {
@@ -10,6 +11,7 @@ export class SetPasswordDto {
     @IsNotEmpty()
     @IsString()
     @Match("confirmation")
+    @PasswordStrength()
     password: string;
 
     @IsNotEmpty()

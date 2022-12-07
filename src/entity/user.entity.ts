@@ -1,4 +1,4 @@
-import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
+import {BeforeInsert, Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
 import {IsNotEmpty, IsString, validateOrReject, ValidationError} from "class-validator";
 import {UniqueInColumn} from "../decorators/unique-in-column.decorator";
 import * as bcrypt from "bcrypt";

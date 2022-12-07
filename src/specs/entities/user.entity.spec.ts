@@ -92,7 +92,7 @@ describe('User', function () {
         it("should raise error if password is too weak", async () => {
             const user = new UserEntity("John", "Doe", "john.doe@live.com", "password");
             const entropy = user.computeEntropy("1234567890");
-            expect(entropy).toBe(52);
+            expect(Math.floor(entropy)).toEqual(64);
         })
     });
 
