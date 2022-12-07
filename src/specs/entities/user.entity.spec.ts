@@ -1,7 +1,7 @@
 import {AppDataSource} from "../../lib/database";
 import {DataSource} from "typeorm";
 import {UserEntity} from "../../entity/user.entity";
-import {ValidationError} from "../../errors/validation.error";
+import {ValidationError} from "class-validator";
 
 describe('User', function () {
     let dataSource: DataSource;
@@ -31,8 +31,22 @@ describe('User', function () {
 
         it('should raise error if email is missing', async function () {
             const user = new UserEntity("John", "Doe", undefined, "password");
-            const error = new ValidationError("Validation error", user, "email");
-            await expect(dataSource.getRepository(UserEntity.name).save(user)).rejects.toThrowError(error);
+            let catchedError: ValidationError[];
+            try {
+                await dataSource.getRepository(UserEntity.name).save(user);
+            } catch (e) {
+                if (Array.isArray(e) && e[0] instanceof ValidationError) {
+                    catchedError = e;
+                }
+            }
+            expect(catchedError).toBeDefined();
+            expect(catchedError.length).toBe(1);
+            expect(catchedError[0].property).toEqual("email");
+            expect(catchedError[0].target).toStrictEqual(user);
         })
     })
+
+    afterAll(async () => {
+        await dataSource.destroy();
+    });
 })

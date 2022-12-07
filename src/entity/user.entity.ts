@@ -33,11 +33,4 @@ export class UserEntity {
         this.email = email;
         this.passwordHash = passwordHash;
     }
-
-    @BeforeInsert()
-    async validate() {
-        await validateOrReject(this).catch((errors) => {
-            throw new ValidationError("Validation error", this, errors[0].property);
-        });
-    }
 }
