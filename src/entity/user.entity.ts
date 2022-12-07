@@ -1,7 +1,8 @@
-import {BeforeInsert, Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
-import {IsNotEmpty, IsString, validateOrReject} from "class-validator";
-import {ValidationError} from "../errors/validation.error";
+import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
+import {IsNotEmpty, IsString, validateOrReject, ValidationError} from "class-validator";
 import {UniqueInColumn} from "../decorators/unique-in-column.decorator";
+import * as bcrypt from "bcrypt";
+import {SetPasswordDto} from "./dto/set-password.dto";
 
 @Entity()
 @Unique(["email"])
@@ -28,12 +29,22 @@ export class UserEntity {
     @IsNotEmpty()
     @IsString()
     @Column({select: false})
-    passwordHash: string;
+    password: string;
 
-    constructor(firstname: string, lastname: string, email: string, passwordHash: string) {
+    constructor(firstname: string, lastname: string, email: string, password?: string) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
-        this.passwordHash = passwordHash;
+        this.password = password;
     }
+
+    async setPassword(password: string, confirmation: string) {
+        const dto = new SetPasswordDto(password, confirmation);
+        await validateOrReject(dto).catch((errors: ValidationError[]) => {
+            throw errors;
+        });
+
+        this.password = await bcrypt.hash(password, 10);
+    }
+
 }

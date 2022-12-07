@@ -2,6 +2,7 @@ import {AppDataSource} from "../../lib/database";
 import {DataSource} from "typeorm";
 import {UserEntity} from "../../entity/user.entity";
 import {ValidationError} from "class-validator";
+import * as bcrypt from "bcrypt";
 
 describe('User', function () {
     let dataSource: DataSource;
@@ -44,7 +45,6 @@ describe('User', function () {
             expect(catchedError).toBeDefined();
             expect(catchedError.length).toBe(1);
             expect(catchedError[0].property).toEqual("email");
-            expect(catchedError[0].target).toStrictEqual(user);
         })
 
         it("should raise error if email is not unique", async function () {
@@ -54,8 +54,7 @@ describe('User', function () {
             let catchedError: ValidationError[];
             try {
                 await dataSource.getRepository(UserEntity.name).save(user2);
-            }
-            catch (e) {
+            } catch (e) {
                 if (Array.isArray(e) && e[0] instanceof ValidationError) {
                     catchedError = e;
                 }
@@ -63,9 +62,39 @@ describe('User', function () {
             expect(catchedError).toBeDefined();
             expect(catchedError.length).toBe(1);
             expect(catchedError[0].property).toEqual("email");
-            expect(catchedError[0].target).toStrictEqual(user2);
         });
+
+        it("should hash password if password match confirmation", async () => {
+            const user = new UserEntity("John", "Doe", "john.doe@live.com");
+            await user.setPassword("password", "password");
+            const hashedPassword = await bcrypt.hash("password", 10);
+            const match = bcrypt.compare("password", hashedPassword);
+            expect(match).toBeTruthy();
+        })
+
+        it("should raise error if password doesn't match confirmation", async () => {
+            const user = new UserEntity("John", "Doe", "john.doe@live.com");
+            let caughtError: ValidationError[];
+            try {
+                await user.setPassword("password", "notpassword");
+            } catch (e) {
+                if (Array.isArray(e) && e[0] instanceof ValidationError) {
+                    caughtError = e;
+                }
+            }
+            expect(caughtError).toBeDefined();
+            expect(caughtError.length).toBe(1);
+            expect(caughtError[0].property).toEqual("password");
+        })
     })
+
+    describe('password strength', () => {
+        it("should raise error if password is too weak", async () => {
+            const user = new UserEntity("John", "Doe", "john.doe@live.com", "password");
+            const entropy = user.computeEntropy("1234567890");
+            expect(entropy).toBe(52);
+        })
+    });
 
     afterAll(async () => {
         await dataSource.destroy();
