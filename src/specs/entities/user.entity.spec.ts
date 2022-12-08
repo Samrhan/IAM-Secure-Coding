@@ -66,7 +66,7 @@ describe('User', function () {
 
         it("should hash password if password match confirmation", async () => {
             const user = new UserEntity("John", "Doe", "john.doe@live.com");
-            await user.setPassword("passwordpassword", "passwordpassword");
+            await user.setPassword("password123password!", "password123password!");
             const hashedPassword = await bcrypt.hash("password", 10);
             const match = bcrypt.compare("password", hashedPassword);
             expect(match).toBeTruthy();
@@ -76,7 +76,7 @@ describe('User', function () {
             const user = new UserEntity("John", "Doe", "john.doe@live.com");
             let caughtError: ValidationError[];
             try {
-                await user.setPassword("passwordpassword", "notpassword");
+                await user.setPassword("password123password!", "notpassword");
             } catch (e) {
                 if (Array.isArray(e) && e[0] instanceof ValidationError) {
                     caughtError = e as ValidationError[];
@@ -104,15 +104,15 @@ describe('User', function () {
 
         it("should return false if password doesn't match the actual password", async () => {
             const user = new UserEntity("John", "Doe", "john.doe@live.com");
-            await user.setPassword("passwordpassword", "passwordpassword");
+            await user.setPassword("password123password!", "password123password!");
             const match = await user.isPasswordValid("notpassword");
             expect(match).toBeFalsy();
         })
 
         it("should return true if password match the actual password", async () => {
             const user = new UserEntity("John", "Doe", "john.doe@live.com");
-            await user.setPassword("passwordpassword", "passwordpassword");
-            const match = await user.isPasswordValid("passwordpassword");
+            await user.setPassword("password123password!", "password123password!");
+            const match = await user.isPasswordValid("password123password!");
             expect(match).toBeTruthy();
         });
     })
