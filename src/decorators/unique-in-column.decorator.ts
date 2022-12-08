@@ -20,9 +20,6 @@ export function UniqueInColumn(props?: UniqueInColumnProps, validationOptions?: 
                     const entity = args.targetName;
                     const propertyValue = args.value;
                     const repository = AppDataSource.getRepository(entity);
-                    if(!repository) {
-                        throw new Error(`Repository for entity ${entity} not found`);
-                    }
 
                     const entities = await repository.findOne({
                         where: {
