@@ -49,7 +49,7 @@ describe('User', function () {
 
         it("should raise error if email is not unique", async function () {
             const user1 = new UserEntity("John", "Doe", "john.doe@live.com", "password");
-            const user2 = new UserEntity("John", "Doe", "john.doe@live.com", "password");
+            const user2 = new UserEntity("John", "Doe", "john.DOE@live.com", "password");
             await dataSource.getRepository(UserEntity.name).save(user1);
             let catchedError: ValidationError[];
             try {
