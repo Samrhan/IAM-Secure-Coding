@@ -26,7 +26,19 @@ export class UserEntity {
         primaryKeys: ['id'],
         caseSensitive: false
     })
-    @Column()
+    @Column({
+        // Force the email to be lowercase
+        // Idea from Nicolas Orvain
+        transformer: {
+            // Use any since `value` can also be a class specific to TypeORM if we have complex where clauses
+            to(value: any): any {
+                return typeof value === 'string' ? value.toLowerCase() : value;
+            },
+            from(value: any): any {
+                return value
+            }
+        }
+    })
     email: string;
 
     @IsNotEmpty()
