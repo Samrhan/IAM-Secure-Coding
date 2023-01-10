@@ -1,17 +1,43 @@
-### Why should you reset the database before each test case? Give examples of issues you may meet otherwise.
+### 1.1 Why should you reset the database before each test case? Give examples of issues you may meet otherwise.
 
 If you don't reset the database before each test case, you may end up with data from a previous test case affecting the current one. For example, if you're testing the functionality of a "add to cart" button on an e-commerce site, and the database is not reset before each test, the cart may already have items in it from a previous test, which would affect the current test.
 
-### What kind of error is currently thrown in test case "should raise error if email is missing"? Is it an SQL error (occurring in the database server) or a validation error before the query got executed? What should it be, so it is easy and secure to format an error message to the end user (considering security, message internationalization, etc.)?
+### 1.2 What kind of error is currently thrown in test case "should raise error if email is missing"? Is it an SQL error (occurring in the database server) or a validation error before the query got executed? What should it be, so it is easy and secure to format an error message to the end user (considering security, message internationalization, etc.)?
 
 This a SQL error, because the column “email” is non nullable. We should use server-side validations so it’s easier to parse et format error messages, and we don’t take the risk to leak the database error to the client.
 
-### Why do we need both a database constraint and a validation in typescript for the same check?
+### 1.3 Why do we need both a database constraint and a validation in typescript for the same check?
 
 We use both database constraint and typescript constraint first because it’s a business rules, and business rules should be managed by the business domain, and because it’s easier to manage error messages and internationalization manually in the code.
 
-### How models validations, such as the one you just wrote, can serve the security of your application? Give an example. In addition, which database mechanism can be leveraged for security hardening in case a validation fails (ex. while persisting 2 entities in response to the same action)? Clue: the mechanism I am thinking about could also operate on afterUpdate subscriptions.
+### 1.4 How models validations, such as the one you just wrote, can serve the security of your application? Give an example. In addition, which database mechanism can be leveraged for security hardening in case a validation fails (ex. while persisting 2 entities in response to the same action)? Clue: the mechanism I am thinking about could also operate on afterUpdate subscriptions.
 
 These model validations make our application more secure because it makes it easier to deal with errors. Database error messages are complicated to work with and susceptible to change (if one of the table or column changes name, type and so on). Thus, needing to parse back the error from the database may break easily. Moreover, letting the database deal with errors opens the possibility of leaking a database stack trace to the API caller, which we must avoid.
 
 If we chain two insertions, updates and so on, we run into the risk of having a valid first query, but an invalid second one. In that case, the system would end up in an invalid state where the first entity has been persisted but not the second one. To prevent this, we can use transactions to make a set of operations atomic : either they all succeed, or they all fail. For instance, in a banking application, if the first operation is to insert a new payment, and the second to update the account total, it would be bad to store the payment, but have a bug in the update of the total that would leave it unchanged. If we use a transaction, a problem in the second update will lead to a rejection of the whole transaction and thus revert the insertion of the payment.
+
+### 2.1 Write a small paper about REST naming convention
+
+REST is all about treating endpoints as resources that are acted on, by opposition to older methods like RPC (Remote Procedure Call) where endpoints would represent functions of the system.
+
+This means that to change the action being performed, one should change the HTTP verb of the request and not the URL. Indeed, URLs represent resources, so different actions on the same resource should happen on the same URL. For instance, if we designed an API the RPC way, we would have routes like `GET /api/get-user?userId={userId}` ; `POST /api/create-user` ; `POST /api/update-user` ; and so on. Instead, designing it in a RESTful way, we would have `GET /api/user/{userId}` ; `POST /api/user` ; `PUT /api/user/{userId}` ; and so on. The URL is constant because we are working on the same resource.
+
+Typically, we use the following mapping for CRUD operations :
+
+| HTTP verb | Action | Detail                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+|-----------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| GET       | READ   | Fetch a resource. For instance, `GET /api/products` should return all the products of an e-commerce site, while `GET /api/product/{productId}` would return the details of a specific product.                                                                                                                                                                                                                                                                                                                      |
+| POST      | CREATE | Create a new resource. For instance, `POST /api/article/{articleId}/comment` would create a new comment on the article `{articleId}`. Be careful though, requests with this verb are not supposed to be idempotent : calling the api N times will create N comments.                                                                                                                                                                                                                                                |
+| PUT       | UPDATE | Replace a resource, in an idempotent way. For instance, `PUT /api/article/{articleId}/comment/{commentId}` would replace the comment `{commentId}` on the article `{articleId}`. However, routes that use this verb are supposed to be idempotent : calling them multiple time (with the same values of course) should produce the same result as calling it once. "Naive" updates where we replace the whole entity are typically implemented with this verb.                                                      |
+| PATCH     | UPDATE | Update part of a resource, in an idempotent way. For instance, `PATCH /api/article/{articleId}/comment/{commentId}` would update part of the comment `{commentId}` on the article `{articleId}` (for instance, only the text, or only the rating, or both but not a third value). However, routes that use this verb are supposed to be idempotent : calling them multiple time (with the same values of course) should produce the same result as calling it once. Partial updates are implemented with this verb. |
+| DELETE    | DELETE | Delete a resource. For instance, `DELETE /api/video/{videoId}` would remove the video `{videoId}` from the system.                                                                                                                                                                                                                                                                                                                                                                                                  |
+
+Options on the request (for example a search criteria in a GET request) typically use URL parameters (ex: `?searchCriteria=name&name=Foo`). Details about the resource (for example the content of a new article in a POST request) are passed through the request/response body.
+
+It is important to use the right verb for the right action. Otherwise, other developers will be confused about what the route actually does because its naming goes against the common convention.
+
+### 2.2 Considering they use REST naming convention, what would do POST /web-api/users and POST /web-api/sessions endpoints?
+
+`POST /web-api/users` would register a user (create a new user)
+
+`POST /web-api/sessions` would log-in a user (create a new session, which we only do if the user's credentials are valid)
