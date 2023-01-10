@@ -32,6 +32,19 @@ describe('User', function () {
             expect(users[0].passwordHash).toBeUndefined();
         });
 
+        it("should convert the user's email to lowercase", async () => {
+            const user = new UserEntity("John", "Doe", "JOHN.doe@live.com", "password");
+            await dataSource.getRepository(UserEntity.name).save(user);
+            const users = await dataSource.getRepository(UserEntity.name).find();
+            expect(users.length).toBe(1);
+            expect(users[0].firstname).toBe("John");
+            expect(users[0].lastname).toBe("Doe");
+            expect(users[0].email).toBe("john.doe@live.com");
+
+            // We don't want to expose the password hash
+            expect(users[0].passwordHash).toBeUndefined();
+        });
+
         it('should raise error if email is missing', async function () {
             const user = new UserEntity("John", "Doe", undefined, "password");
             let catchedError: ValidationError[];
