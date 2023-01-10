@@ -23,9 +23,8 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
-    "class-validator": "^0.13.2",
+    "class-validator": "^0.14.0",
     "dotenv": "^16.0.3",
-    "joi": "^17.7.0",
     "pg": "^8.8.0",
     "ts-jest": "^29.0.3",
     "tsc": "^2.0.4",
