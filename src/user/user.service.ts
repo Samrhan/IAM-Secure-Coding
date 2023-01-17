@@ -4,9 +4,6 @@ import {AppDataSource} from "../lib/database";
 
 @Service()
 export class UserService {
-    constructor() {
-    }
-
     async createUser(firstname: string, lastname: string, email: string, password: string, passwordConfirmation: string) {
         const repository = AppDataSource.getRepository(UserEntity);
         const userEntity = new UserEntity(firstname, lastname, email);

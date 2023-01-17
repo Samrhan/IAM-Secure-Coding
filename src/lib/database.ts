@@ -1,5 +1,4 @@
 import {DataSource} from "typeorm"
-import {UserEntity} from "../user/entity/user.entity";
 import dotenv from 'dotenv';
 import {InsertSubscriber} from "../subcribers/insert.subcriber";
 

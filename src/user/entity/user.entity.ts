@@ -1,5 +1,5 @@
 import {Column, Entity, PrimaryGeneratedColumn, Unique} from "typeorm";
-import {IsEmail, IsNotEmpty, IsString, validateOrReject, ValidationError} from "class-validator";
+import {IsEmail, IsNotEmpty, IsString, validateOrReject} from "class-validator";
 import {UniqueInColumn} from "../../decorators/unique-in-column.decorator";
 import * as bcrypt from "bcrypt";
 import {SetPasswordDto} from "./dto/set-password.dto";

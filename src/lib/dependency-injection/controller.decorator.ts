@@ -1,7 +1,7 @@
 import { Container, Injection } from './container';
 
 export function Controller() {
-    return function injectionTarget<T extends { new(...args: any[]): {} }>(constructor: T): T | void {
+    return function injectionTarget<T extends { new(...args: any[]): object }>(constructor: T): T | void {
         // replacing the original constructor with a new one that provides the injections from the Container
         const newConstructor = class extends constructor {
             constructor(...args: any[]) {
