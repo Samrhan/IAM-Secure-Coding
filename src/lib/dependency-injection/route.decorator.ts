@@ -2,7 +2,7 @@ import {Container} from "./container";
 import {server} from "../fastify";
 import {FastifyReply, FastifyRequest} from "fastify";
 import {validateOrReject, ValidationError} from "class-validator";
-import {plainToInstance} from "class-transformer";
+import {ClassConstructor, plainToInstance} from "class-transformer";
 
 enum ParamTypes {
     body = 'body'
@@ -20,15 +20,19 @@ function formatRoute(route: string) {
 
 async function defineParameters(paramsTypes: { index: number, paramType: ParamTypes, type: any }[], request: FastifyRequest, reply: FastifyReply) {
     const args = []
-    for (let i of paramsTypes) {
+    for (const i of paramsTypes) {
         switch (i.paramType) {
             case ParamTypes.body:
-                const arg: object = plainToInstance(i.type, request.body, {excludeExtraneousValues: true})
-                await validateOrReject(arg, {forbidUnknownValues: true})
-                args.push(arg)
+                args.push(await getValidatedRequestBody(i.type, request.body as object))
         }
     }
     return args;
+}
+
+async function getValidatedRequestBody(type: ClassConstructor<object>, requestBody: object){
+    const arg: object = plainToInstance(type, requestBody, {excludeExtraneousValues: true})
+    await validateOrReject(arg, {forbidUnknownValues: true})
+    return arg
 }
 
 export function Post(uri?: string) {
