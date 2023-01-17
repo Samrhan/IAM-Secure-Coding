@@ -12,7 +12,7 @@ export const AppDataSource = new DataSource({
     url: process.env["NODE_ENV"] === 'production' ? process.env[`TYPEORM_URL`] : process.env[`TYPEORM_URL_TEST`],
     database: "test",
     synchronize: true,
-    logging: true,
+    logging: false,
     entities: ['./**/*.entity.{ts,js}'],
     subscribers: [InsertSubscriber],
     migrations: [],

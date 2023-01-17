@@ -32,7 +32,7 @@ async function defineParameters(paramsTypes: { index: number, paramType: ParamTy
 }
 
 export function Post(uri?: string) {
-    return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    return function (target: unknown, propertyKey: string, descriptor: PropertyDescriptor) {
         const metadatas = Reflect.getOwnMetadataKeys(target, propertyKey) as (keyof typeof ParamTypes)[];
         const methodParamTypes = Reflect.getMetadata('design:paramtypes', target, propertyKey);
         const callParams: { index: number, paramType: ParamTypes, type: any }[] = [];
@@ -62,9 +62,13 @@ export function Post(uri?: string) {
                     }
                 }
             }
-            const resultType = Reflect.getMetadata('design:returntype', target, propertyKey);
             try {
-                const resultInstance = plainToInstance(resultType, await controller[propertyKey](...parameters));
+                const resultInstance = await controller[propertyKey](...parameters)
+                // Ensure the returned object is not a plain object
+                if (resultInstance?.constructor === Object){
+                    return reply.status(500).send();
+                }
+                // Validate it
                 return await validateOrReject(resultInstance).then(() => {
                     return reply.send(resultInstance);
                 }).catch((e) => {
@@ -80,6 +84,7 @@ export function Post(uri?: string) {
                         return reply.status(400).send();
                     }
                 }
+                console.error(e)
                 return reply.status(500).send();
             }
         });

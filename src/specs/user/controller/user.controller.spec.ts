@@ -22,6 +22,10 @@ describe("User Controller", () => {
         await dataSource.getRepository(UserEntity).clear()
     });
 
+    afterAll(async () => {
+        await dataSource.getRepository(UserEntity).clear()
+    })
+
     it('should register the user', async function () {
         const response = await server.inject({url: `/users`, method: 'POST', payload: createUserPayload});
         expect(response.statusCode).toBe(200);
