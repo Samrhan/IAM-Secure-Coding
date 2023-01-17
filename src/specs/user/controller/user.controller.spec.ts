@@ -29,13 +29,13 @@ describe("User Controller", () => {
     it('should register the user', async function () {
         const response = await server.inject({url: `/users`, method: 'POST', payload: createUserPayload});
         expect(response.statusCode).toBe(200);
-        expect(response.json().firstname).toBe("test");
-        expect(response.json().lastname).toBe("test");
-        expect(response.json().email).toBe("test@gmail.com");
-        expect(response.json().passwordHash).toBeUndefined();
-
+        const responseData: any = response.json();
         const uuidRegex = new RegExp("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$");
-        expect(response.json().id).toMatch(uuidRegex);
+        expect(responseData?.firstname).toBe("test");
+        expect(responseData?.lastname).toBe("test");
+        expect(responseData?.email).toBe("test@gmail.com");
+        expect(responseData?.passwordHash).toBeUndefined();
+        expect(responseData?.id).toMatch(uuidRegex);
     })
 
     it('should raise error if email is missing', async () => {

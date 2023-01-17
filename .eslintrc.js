@@ -23,5 +23,12 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
 
     // Feel free to enable/disable some rules depending on your needs.
+
+    // We need to deal with 'any' values when doing meta-programming or testing it
+    '@typescript-eslint/no-unsafe-member-access': 'off',
+    '@typescript-eslint/no-unsafe-assignment': 'off',
+    '@typescript-eslint/no-unsafe-return': 'off',
+    '@typescript-eslint/no-unsafe-argument': 'off',
+    '@typescript-eslint/no-unsafe-call': 'off',
   }
 }

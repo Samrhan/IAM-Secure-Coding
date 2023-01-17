@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { Injection } from './container';
 export function Inject() {
-    return function(target: Object, propertyKey: string | symbol, parameterIndex: number) {
+    return function(target: object, propertyKey: string | symbol, parameterIndex: number) {
         const key = Reflect.getMetadata('design:paramtypes', target)[parameterIndex].name;
 
         const injection: Injection = { index: parameterIndex, key };

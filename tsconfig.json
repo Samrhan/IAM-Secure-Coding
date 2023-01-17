@@ -10,7 +10,7 @@
     "strictNullChecks": false,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
   },
-  "include": ["src/**/*", "types/**/*"],
+  "include": ["src/**/*", "types/**/*", "./.eslintrc.js"],
 }
