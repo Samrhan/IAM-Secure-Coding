@@ -1,6 +1,6 @@
 import {Controller, Inject, Post} from "../lib/dependency-injection";
 import {UserService} from "./user.service";
-import {Body} from "../lib/utils/body.decorator";
+import {Body} from "../lib/web/utils-decorators/body.decorator";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UserResponseDto} from "./dto/user-response.dto";
 

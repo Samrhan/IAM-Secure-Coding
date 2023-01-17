@@ -43,10 +43,14 @@ describe("User Controller", () => {
             url: `/users`, method: 'POST', payload: {
                 "firstname": "test",
                 "lastname": "test",
-                "email": undefined,
             }
         })
         expect(response.statusCode).toBe(400);
     });
 
+    it("should raise error on unexpected query params", async () => {
+        const response = await server.inject({url: `/users?test=1`, method: 'POST', payload: createUserPayload});
+        expect(response.statusCode).toBe(400);
+        expect(response.json().message).toBe("The query is not expected in this route");
+    })
 })
