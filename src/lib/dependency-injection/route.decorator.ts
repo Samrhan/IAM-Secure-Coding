@@ -23,8 +23,8 @@ async function defineParameters(paramsTypes: { index: number, paramType: ParamTy
     for (let i of paramsTypes) {
         switch (i.paramType) {
             case ParamTypes.body:
-                const arg = plainToInstance(i.type, request.body) as object
-                await validateOrReject(arg)
+                const arg: object = plainToInstance(i.type, request.body, {excludeExtraneousValues: true})
+                await validateOrReject(arg, {forbidUnknownValues: true})
                 args.push(arg)
         }
     }
