@@ -6,7 +6,7 @@ export function Match(property: string, validationOptions?: ValidationOptions) {
             name: 'match',
             target: object.constructor,
             propertyName: propertyName,
-            options: validationOptions,
+            options: {...validationOptions, message: 'Passwords do not match'},
             constraints: [property],
             validator: {
                 validate(value: any, args: ValidationArguments) {

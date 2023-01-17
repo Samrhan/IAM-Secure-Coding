@@ -1,6 +1,6 @@
-import {AppDataSource} from "../../lib/database";
+import {AppDataSource} from "../../../lib/database";
 import {DataSource} from "typeorm";
-import {UserEntity} from "../../entity/user.entity";
+import {UserEntity} from "../../../user/entity/user.entity";
 import {ValidationError} from "class-validator";
 import * as bcrypt from "bcrypt";
 

@@ -24,7 +24,7 @@ export function PasswordStrength(validationOptions?: ValidationOptions) {
             name: 'match',
             target: object.constructor,
             propertyName: propertyName,
-            options: validationOptions,
+            options: {...validationOptions, message: 'Password is not strong enough'},
             validator: {
                 validate
             },

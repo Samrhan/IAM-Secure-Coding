@@ -14,7 +14,7 @@ export function UniqueInColumn(props?: UniqueInColumnProps, validationOptions?: 
             name: 'uniqueInColumn',
             target: object.constructor,
             propertyName: propertyName,
-            options: validationOptions,
+            options: {...validationOptions, message: 'Email déjà utilisé'},
             constraints: [props],
             validator: {
                 async validate(value: any, args: ValidationArguments) {

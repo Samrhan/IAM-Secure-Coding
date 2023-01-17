@@ -1,6 +1,6 @@
 import {IsNotEmpty, IsString} from "class-validator";
-import {Match} from "../../decorators/match.decorator";
-import {PasswordStrength} from "../../decorators/password-strength.validator";
+import {Match} from "../../../decorators/match.decorator";
+import {PasswordStrength} from "../../../decorators/password-strength.validator";
 
 export class SetPasswordDto {
     constructor(password: string, confirmation: string) {

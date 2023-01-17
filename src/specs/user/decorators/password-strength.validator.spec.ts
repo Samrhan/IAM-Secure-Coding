@@ -1,5 +1,5 @@
 import { validateOrReject } from "class-validator";
-import {PasswordStrength} from "../../decorators/password-strength.validator";
+import {PasswordStrength} from "../../../decorators/password-strength.validator";
 
 class PasswordStrengthStub {
     constructor(password: string) {

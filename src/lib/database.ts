@@ -1,5 +1,5 @@
 import {DataSource} from "typeorm"
-import {UserEntity} from "../entity/user.entity";
+import {UserEntity} from "../user/entity/user.entity";
 import dotenv from 'dotenv';
 import {InsertSubscriber} from "../subcribers/insert.subcriber";
 
@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
     database: "test",
     synchronize: true,
     logging: true,
-    entities: [UserEntity],
+    entities: ['./**/*.entity.{ts,js}'],
     subscribers: [InsertSubscriber],
     migrations: [],
 })
