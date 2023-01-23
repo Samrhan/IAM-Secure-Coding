@@ -8,8 +8,9 @@ dotenv.config({path: '.env'});
 
 async function run(){
     await AppDataSource.initialize();
-    await server.listen(process.env.FASTIFY_PORT);
-    console.log("Server is running on port 3000");
+    const port = process.env.FASTIFY_PORT;
+    await server.listen(port);
+    console.log(`Server is running on port ${port}`);
     registerController(UserController, SessionController)
 }
 
