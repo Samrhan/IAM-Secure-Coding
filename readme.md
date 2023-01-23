@@ -67,6 +67,7 @@ Then other steps can be taken to avoid usurpation :
 - Properly configure HTTPS certificates
 - Use HTTP redirections from `http://*` URLs to `https://*` (not sufficient in itself as it is useless against MITM attacks, see next point) and refuse traffic over HTTP
 - Use [HSTS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security) to force the browser to use HTTPS in all subsequent requests without trying HTTP first even if the user types `http://*` in the address bar
+- Properly defend against CSRF type attacks
 
 Finally, there are mitigation steps that can be taken to lessen the impact of a stolen identifier :
 - Do not rely solely on the session token for the most privileged actions : require a second identification method like re-typing a password or providing a one-time code (ex: Sudo mode in GitHub, or security codes when sending money in banking apps)
