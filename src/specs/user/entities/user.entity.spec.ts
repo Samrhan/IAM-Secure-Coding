@@ -11,11 +11,11 @@ describe('User', function () {
         dataSource = await AppDataSource.initialize().catch((error: Error) => {
             throw new Error(`Error initializing database: ${error.message}`);
         });
-        await dataSource.getRepository(UserEntity.name).clear()
+        await dataSource.getRepository(UserEntity.name).delete({})
     })
 
     afterEach(async () => {
-        await dataSource.getRepository(UserEntity.name).clear()
+        await dataSource.getRepository(UserEntity.name).delete({})
     })
 
     describe('validations', function () {

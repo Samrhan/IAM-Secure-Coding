@@ -1,6 +1,6 @@
 import {handleListener, ParamType, ParamTypes} from "../listener";
 
-export function Post(uri?: string) {
+export function Delete(uri?: string) {
     return function (target: unknown, propertyKey: string) {
         const metadatas = Reflect.getOwnMetadataKeys(target, propertyKey) as (keyof typeof ParamTypes)[];
         const methodParamTypes = Reflect.getMetadata('design:paramtypes', target, propertyKey);
@@ -11,7 +11,7 @@ export function Post(uri?: string) {
                 parametersFromMetadata.push({params, paramType: ParamTypes[metadata], type: methodParamTypes[params.index]});
             }
         }
-        handleListener('post', uri, parametersFromMetadata, target, propertyKey);
+        handleListener('delete', uri, parametersFromMetadata, target, propertyKey);
     };
 }
 

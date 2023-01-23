@@ -1,0 +1,26 @@
+import {FastifyReply} from "fastify";
+
+/**
+ * This class is used to wrap the default response of fastify
+ * in order to be table to return it from the controller
+ */
+export class CustomResponse {
+    constructor(private defaultResponse: FastifyReply){
+    }
+
+    setCookie(name: string, value: string, options: any) {
+        void this.defaultResponse.setCookie(name, value, options);
+    }
+
+    send(data: any) {
+        return this.defaultResponse.send(data);
+    }
+
+    status(statusCode: number) {
+        return this.defaultResponse.status(statusCode);
+    }
+
+    get cookies(){
+        return this.defaultResponse.cookies;
+    }
+}

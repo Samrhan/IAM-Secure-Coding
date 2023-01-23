@@ -1,4 +1,4 @@
-import {createUserFixture} from "../../user/fixture/users.fixture.spec";
+import {createUserFixture} from "../../user/fixture/users.fixture";
 import {SessionEntity} from "../../../session/entity/session.entity";
 import {AppDataSource} from "../../../lib/database";
 import {DataSource} from "typeorm";
@@ -47,5 +47,9 @@ describe("Session Entity", () => {
         expect(caughtError).toBeDefined();
         expect(caughtError.length).toBe(1);
         expect(caughtError[0].property).toEqual("user");
+    });
+
+    afterAll(async () => {
+        await dataSource.destroy();
     });
 })

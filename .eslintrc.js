@@ -12,7 +12,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended-requiring-type-checking'
   ],
   rules: {
-    // I let the compiler infer the return types of methods, functions... itself.
+    // I let the compiler infer the return utils of methods, functions... itself.
     // For my use, I do not need a stable interface for outside modules, because I am
     // the only one to consume my own code. It is another story if you build a library with a stable interface.
     '@typescript-eslint/explicit-module-boundary-types': 'off',

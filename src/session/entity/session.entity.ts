@@ -1,4 +1,4 @@
-import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique} from "typeorm";
 import {UserEntity} from "../../user/entity/user.entity";
 import crypto from "crypto";
 import {IsBase64, IsDate, IsDefined, IsNotEmpty, IsOptional} from "class-validator";
@@ -16,6 +16,7 @@ const dateTransformer = {
 }
 
 @Entity({name: "session"})
+@Unique(["token"])
 export class SessionEntity {
     @PrimaryGeneratedColumn("uuid")
     id: string;
