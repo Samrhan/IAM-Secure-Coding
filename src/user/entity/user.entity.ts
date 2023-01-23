@@ -4,7 +4,7 @@ import {UniqueInColumn} from "../../decorators/unique-in-column.decorator";
 import * as bcrypt from "bcrypt";
 import {SetPasswordDto} from "./dto/set-password.dto";
 
-@Entity()
+@Entity({name: "user"})
 @Unique(["email"])
 export class UserEntity {
     @PrimaryGeneratedColumn("uuid")
