@@ -28,4 +28,8 @@ export class CustomResponse {
     sendHtml(file: ReadStream){
         return this.defaultResponse.type('text/html').send(file);
     }
+
+    redirect(url: string){
+        return this.defaultResponse.redirect(url)
+    }
 }

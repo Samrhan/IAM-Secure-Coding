@@ -7,7 +7,6 @@ import {createSessionFixture} from "../../session/fixture/session.fixture";
 import cookie from "@fastify/cookie";
 import {SessionEntity} from "../../../session/entity/session.entity";
 import {createUserFixture} from "../fixture/users.fixture";
-import exp from "constants";
 
 describe("User Controller", () => {
     let dataSource: DataSource;
