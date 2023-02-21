@@ -17,6 +17,8 @@ export class HttpException extends Error {
             this.message = this.response;
         } else if (this.constructor) {
             this.message = this.constructor.name
+        } else {
+            this.message = 'HttpException';
         }
     }
 }

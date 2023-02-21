@@ -4,7 +4,6 @@ import {validateOrReject, ValidationError} from "class-validator";
 import {FastifyReply, FastifyRequest} from "fastify";
 import {ClassConstructor, plainToInstance} from "class-transformer";
 import {HttpException} from "./exceptions/http.exception";
-import * as repl from "repl";
 import {CustomResponse} from "./utils/custom-response.util";
 import {getSession} from "./utils/session.util";
 import {UnauthorizedException} from "./exceptions/unauthorized.exception";
@@ -63,13 +62,13 @@ async function defineParameters(paramsTypes: ParamType[], request: FastifyReques
     for (const i of paramsTypes) {
         switch (i.paramType) {
             case ParamTypes.body:
-                args.push(await getValidatedObject(i.type, request.body as object))
+                args.push(await getValidatedObject(i.type, (request.body ?? {}) as object))
                 break;
             case ParamTypes.query:
-                args.push(await getValidatedObject(i.type, request.query as object))
+                args.push(await getValidatedObject(i.type, (request.query ?? {}) as object))
                 break;
             case ParamTypes.params:
-                args.push(await getValidatedObject(i.type, request.params as object))
+                args.push(await getValidatedObject(i.type, (request.params ?? {}) as object))
                 break;
             case ParamTypes.response:
                 args.push(new CustomResponse(reply))

@@ -1,4 +1,5 @@
 import {FastifyReply} from "fastify";
+import {ReadStream} from "fs";
 
 /**
  * This class is used to wrap the default response of fastify
@@ -22,5 +23,9 @@ export class CustomResponse {
 
     get cookies(){
         return this.defaultResponse.cookies;
+    }
+
+    sendHtml(file: ReadStream){
+        return this.defaultResponse.type('text/html').send(file);
     }
 }

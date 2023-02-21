@@ -2,7 +2,6 @@ import {Service} from "../lib/dependency-injection";
 import {AppDataSource} from "../lib/database";
 import {UserEntity} from "../user/entity/user.entity";
 import {SessionEntity} from "./entity/session.entity";
-import {SessionController} from "./session.controller";
 import {Repository} from "typeorm";
 import {NotFoundException} from "../lib/web/exceptions/not-found.exception";
 
